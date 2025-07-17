@@ -1,0 +1,51 @@
+{% extends 'clientes/base.html' %}
+{% block title %}Buscar Cliente{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 460px; margin: 40px auto;" id="busca-card">
+    <h2 class="card-title">Buscar Cliente</h2>
+    <form method="get">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Buscar</button>
+        <a href="{% url 'clientes:lista' %}" class="btn">Cancelar</a>
+    </form>
+</div>
+{% if clientes %}
+<div class="card" style="max-width: 1100px; margin: 32px auto 0 auto;">
+    <div class="table-responsive">
+        <table class="result-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CNPJ</th>
+                    <th>Estado</th>
+                    <th>Situação</th>
+                    <th>Data de inclusão</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.nome }}</td>
+                    <td>{{ cliente.cnpj }}</td>
+                    <td>{{ cliente.estado_origem }}</td>
+                    <td>
+                        {% if cliente.situacao %}
+                            <span class="status-ativo">Ativo</span>
+                        {% else %}
+                            <span class="status-inativo">Inativo</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ cliente.data_inclusao|date:"d/m/Y" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% elif buscou %}
+<div class="card" style="max-width: 600px; margin: 32px auto 0 auto; text-align:center;">
+    <div class="empty-msg">Nenhum cliente encontrado.</div>
+</div>
+{% endif %}
+{% endblock %}

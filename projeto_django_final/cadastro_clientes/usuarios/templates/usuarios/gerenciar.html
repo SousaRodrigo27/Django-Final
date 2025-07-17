@@ -1,0 +1,54 @@
+{% extends "clientes/base.html" %}
+{% block content %}
+<h2 style="text-align:center; font-weight:600; margin-bottom:24px; color:#1976d2;">Gerenciar Usuários</h2>
+<div class="card" style="max-width: 1100px; margin: 0 auto;">
+    <div class="table-responsive">
+        <table class="result-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Data de Cadastro</th>
+                    <th>Último Login</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.profile.created_at|date:"d/m/Y H:i" }}</td>
+                    <td>{% if user.last_login %}{{ user.last_login|date:"d/m/Y H:i" }}{% else %}<span style="color:#bbb;">Nunca</span>{% endif %}</td>
+                    <td>
+                        {% if user.profile.is_blocked %}
+                            <span class="status-inativo">Inativo</span>
+                        {% else %}
+                            <span class="status-ativo">Ativo</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not user.is_superuser %}
+                            <div class="actions-row">
+                                {% if user.profile.is_blocked %}
+                                    <a href="{% url 'usuarios:desbloquear_usuario' user.id %}" class="btn btn-info">Desbloquear</a>
+                                {% else %}
+                                    <a href="{% url 'usuarios:bloquear_usuario' user.id %}" class="btn btn-warning">Bloquear</a>
+                                {% endif %}
+                                <a href="{% url 'usuarios:resetar_senha_usuario' user.id %}" class="btn btn-info">Resetar Senha</a>
+                                <a href="{% url 'usuarios:deletar_usuario' user.id %}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.');">Excluir</a>
+                            </div>
+                        {% else %}
+                            <span style="color:#888; background:#f4f6f8; border-radius:5px; padding:5px 12px; font-weight:500;">Admin</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" style="text-align:center; color:#888; padding:24px 0;">Nenhum usuário encontrado.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

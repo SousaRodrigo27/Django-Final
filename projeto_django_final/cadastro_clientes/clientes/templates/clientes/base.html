@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>{% block title %}Cadastro de Clientes{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="header-flex header-distribute">
+        <div class="logo">
+            <span style="font-size:1.7em;">&#128100;</span>
+            <span>Cadastro de Clientes</span>
+        </div>
+        <nav class="main-nav" style="margin: 0 auto; position: absolute; left: 0; right: 0; display: flex; justify-content: center; gap: 16px; top: 50%; transform: translateY(-50%); z-index: 2;">
+            <a href="#" id="btnSobreMim" onclick="document.getElementById('sobreModal').style.display='block'; return false;">Sobre Mim</a>
+            <a href="{% url 'clientes:lista' %}">Clientes</a>
+            <a href="{% url 'clientes:criar' %}">Novo Cliente</a>
+            <a href="{% url 'clientes:buscar' %}">Buscar</a>
+            {% if user.is_superuser %}
+                <a href="{% url 'usuarios:gerenciar' %}">Gerenciar Usuários</a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <a href="{% url 'usuarios:perfil' %}">Perfil</a>
+                <a href="{% url 'usuarios:logout' %}" style="background:var(--vermelho-suave);color:var(--azul-escuro);">Sair</a>
+            {% else %}
+                <a href="{% url 'usuarios:login' %}">Entrar</a>
+            {% endif %}
+        </nav>
+        {% if user.is_authenticated %}
+        <div class="user-avatar">
+            <a href="{% url 'usuarios:perfil' %}" style="padding:0; background:none; box-shadow:none;">
+                {% if user.profile.image and user.profile.image.url %}
+                    <img src="{{ user.profile.image.url }}" alt="Perfil" class="avatar-img">
+                {% else %}
+                    <span class="avatar-img" style="display:inline-flex; align-items:center; justify-content:center; background:var(--azul-claro); color:#fff; font-weight:600; border:2px solid var(--azul-escuro); text-transform:uppercase; vertical-align:middle;">
+                        {{ user.username|first|upper }}
+                    </span>
+                {% endif %}
+            </a>
+        </div>
+        {% endif %}
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <!-- Modal Sobre Mim -->
+    <div id="sobreModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; overflow:auto; background:rgba(26,35,126,0.18);">
+      <div style="background:#fff; margin:48px auto; padding:36px 36px; border-radius:14px; max-width:650px; width:96vw; box-shadow:0 2px 16px rgba(30,40,90,0.13); position:relative; animation:fadeIn 0.3s; font-size:1.11em; line-height:1.7;">
+        <button onclick="document.getElementById('sobreModal').style.display='none'" style="position:absolute; top:12px; right:16px; background:none; border:none; font-size:1.7em; color:#1976d2; cursor:pointer;">&times;</button>
+<marquee><h1>Sobre mim</h1></marquee>
+
+<p>Olá! Meu nome é Rodrigo dos Santos Sousa, sou Analista de Dados com mais de 6 anos de experiência em Business Intelligence, atuando na construção de soluções de análise de dados que geram valor para o negócio.</p>
+
+<p>Atualmente trabalho como Analista de Dados III, com foco em processos de ETL, dashboards, governança e modelagem de dados. Tenho domínio em ferramentas como Python, SQL, Power BI, SSIS, Pentaho e outras tecnologias de dados.</p>
+
+<p>Sou formado com MBA em Business Intelligence pela FIAP e sigo em constante evolução, tendo concluído formações em Data Analytics e Data Science. Possuo certificações como MTA SQL Server, ITIL V3, SCRUM Foundation e Pentaho.</p>
+
+<p>Além do lado técnico, tenho perfil didático, autodidata e comunicativo, com experiência em liderança e docência, sempre buscando compartilhar conhecimento e aprender com o time.</p>
+
+<p>Este blog é uma forma de registrar conteúdos, reflexões e aprendizados ao longo da minha jornada com dados.</p>
+
+<p>Fique à vontade para explorar as páginas e me acompanhar nessa trajetória!</p>
+<br>
+<br>
+   <a href="C:\Users\rodrigo.sousa\Downloads\blog_django_basico\templates\pages.html">← Paginas </a><br>
+    <a href="C:\Users\rodrigo.sousa\Downloads\blog_django_basico\templates\page_detail.html">🔗 Detalhes</a>
+<br>
+<br>
+<br>
+<br>
+<p>Esta super curto e simplista :/</p>
+		<style>
+          @media (max-width: 900px) {
+            #sobreModal > div {
+              max-width: 98vw !important;
+              padding: 18px 4vw !important;
+              font-size: 1em !important;
+            }
+          }
+          @media (max-width: 600px) {
+            #sobreModal > div {
+              padding: 10px 2vw !important;
+              font-size: 0.97em !important;
+            }
+            #sobreModal h3, #sobreModal h4 {
+              font-size: 1.05em !important;
+            }
+            #sobreModal ul, #sobreModal p {
+              font-size: 0.97em !important;
+            }
+          }
+        </style>
+      </div>
+    </div>
+    <script>
+      window.onclick = function(event) {
+        var modal = document.getElementById('sobreModal');
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+    </script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
